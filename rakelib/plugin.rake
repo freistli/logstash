@@ -89,10 +89,12 @@ namespace "plugin" do
 
     puts("[plugin:build-local-core-gem] Building #{File.join(path, name)}.gemspec")
 
+    gem_path = nil
     Dir.chdir(path) do
       spec = Gem::Specification.load("#{name}.gemspec")
-      Gem::Package.build(spec)
+      gem_path = Gem::Package.build(spec)
     end
+    FileUtils.cp(File.join(path, gem_path), "build/")
 
     task.reenable # Allow this task to be run again
   end
